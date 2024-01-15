@@ -1,0 +1,31 @@
+[tool.poetry]
+name = "game-project"
+version = "0.1.0"
+description = "Kingdom Death: Pirates game"
+authors = ["gumatt <gumatt@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+litestar = {extras = ["msgspec"], version = "^2.5.0"}
+loguru = "^0.7.2"
+
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.4.4"
+pytest-watch = "^4.2.0"
+pytest-sugar = "^0.9.7"
+pytest-cov = "^4.1.0"
+assertpy = "^1.1"
+
+[tool.pytest.ini_options]
+pythonpath = ["tests", "kdp", ".venv/lib/python3.11/site-packages"]
+testpaths = ["tests"]
+python_functions = "*_test"
+
+[tool.mypy]
+ignore_missing_imports = true
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
