@@ -9,7 +9,6 @@ from kdp.domain.entities import (
 from kdp.domain.value_objects import (
     MapDirectionsOrdinal as Direction,
     MapLocationOrdinal,
-    Mappable,
     ValidationError)
 
 
@@ -84,11 +83,9 @@ def kdp_map_w_negative_dimensions_test():
 def villain_test():
     villain = Villain(
         name='Captain Kidd',
-        map_info=Mappable(
-            location=MapLocationOrdinal(row=5, column=5),
-            direction=Direction.NORTH,
-            size=MapDimensionsOrdinal(1, 1))
-        )
+        location=MapLocationOrdinal(row=5, column=5),
+        direction=Direction.NORTH,
+        size=MapDimensionsOrdinal(1, 1))
 
     assert_that(villain.name).is_equal_to('Captain Kidd')
     assert_that(villain.location.row).is_equal_to(5)
