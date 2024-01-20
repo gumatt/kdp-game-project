@@ -1,4 +1,7 @@
-# Starting Litestar api server
+# KDP Project
+
+
+## Starting Litestar api server
 
 ```bash
 # run from root direcdtory using litestar_app script
@@ -16,3 +19,4 @@ litestar --app $KDP_APP run --reload --port XXXX
 ```
 
 Note:  --reload is an option of the run command within litestar, and not an option of litestar itself.
+
