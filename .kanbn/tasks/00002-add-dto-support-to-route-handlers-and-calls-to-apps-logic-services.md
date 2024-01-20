@@ -1,12 +1,12 @@
 ---
 created: 2024-01-20T01:25:19.237Z
-updated: 2024-01-20T01:29:24.070Z
+updated: 2024-01-20T01:41:43.655Z
 assigned: ""
 progress: 0
 tags: []
 ---
 
-# Add DTO support to route handlers and calls to apps_logic.services
+# 00002 - Add DTO support to route handlers and calls to apps_logic.services
 
 Test/Learn/Add DTOs to handle validation and translation to/from user input
 
