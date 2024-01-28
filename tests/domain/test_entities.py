@@ -2,20 +2,15 @@ from assertpy import assert_that, fail
 from msgspec import json
 from pytest import fixture
 
-from kdp.domain.entities import (
-    KDPMap,
-    MapDimensionsOrdinal,
-    Villain)
-from kdp.domain.value_objects import (
-    MapDirectionsOrdinal as Direction,
-    MapLocationOrdinal,
-    ValidationError)
-
+from kdp.domain.entities import KDPMap, MapDimensionsOrdinal, Villain
+from kdp.domain.value_objects import MapDirectionsOrdinal as Direction
+from kdp.domain.value_objects import MapLocationOrdinal, ValidationError
 
 
 @fixture
 def base_map():
     return KDPMap.factory(rows=20, columns=30, objects=[])
+
 
 @fixture
 def capt_kidd():
@@ -24,7 +19,8 @@ def capt_kidd():
         row=1,
         col=1,
         direction=Direction.NORTH,
-        size=1)
+        size=1,
+    )
 
 
 @fixture
@@ -34,7 +30,9 @@ def big_villain():
         row=1,
         col=1,
         direction=Direction.NORTH,
-        size=3)
+        size=3,
+    )
+
 
 def pytest_smoke_test():
     """basid test if pytest is configured and working properly"""
@@ -82,12 +80,13 @@ def kdp_map_w_negative_dimensions_test():
 
 def villain_test():
     villain = Villain(
-        name='Captain Kidd',
+        name="Captain Kidd",
         location=MapLocationOrdinal(row=5, column=5),
         direction=Direction.NORTH,
-        size=MapDimensionsOrdinal(1, 1))
+        size=MapDimensionsOrdinal(1, 1),
+    )
 
-    assert_that(villain.name).is_equal_to('Captain Kidd')
+    assert_that(villain.name).is_equal_to("Captain Kidd")
     assert_that(villain.location.row).is_equal_to(5)
     assert_that(villain.location.column).is_equal_to(5)
     assert_that(villain.direction).is_equal_to(Direction.NORTH)
@@ -99,7 +98,7 @@ def place_kidd_on_map_test(base_map, capt_kidd):
     base_map.place(capt_kidd, 5, 5)
 
     assert_that(base_map.objects).is_length(1)
-    assert_that(base_map.objects[0].name).is_equal_to('Captain Kidd')
+    assert_that(base_map.objects[0].name).is_equal_to("Captain Kidd")
     assert_that(base_map.objects[0].location.row).is_equal_to(5)
     assert_that(base_map.objects[0].location.column).is_equal_to(5)
     assert_that(base_map.objects[0].direction).is_equal_to(Direction.NORTH)
@@ -112,7 +111,7 @@ def re_place_kidd_on_map_test(base_map, capt_kidd):
     base_map.place(capt_kidd, 5, 5)
 
     assert_that(base_map.objects).is_length(1)
-    assert_that(base_map.objects[0].name).is_equal_to('Captain Kidd')
+    assert_that(base_map.objects[0].name).is_equal_to("Captain Kidd")
     assert_that(base_map.objects[0].location.row).is_equal_to(5)
     assert_that(base_map.objects[0].location.column).is_equal_to(5)
     assert_that(base_map.objects[0].direction).is_equal_to(Direction.NORTH)
@@ -125,7 +124,7 @@ def move_kidd_on_map_test(base_map, capt_kidd):
     base_map.move(capt_kidd, 10, 10)
 
     assert_that(base_map.objects).is_length(1)
-    assert_that(base_map.objects[0].name).is_equal_to('Captain Kidd')
+    assert_that(base_map.objects[0].name).is_equal_to("Captain Kidd")
     assert_that(base_map.objects[0].location.row).is_equal_to(10)
     assert_that(base_map.objects[0].location.column).is_equal_to(10)
     assert_that(base_map.objects[0].direction).is_equal_to(Direction.NORTH)
@@ -139,14 +138,16 @@ def move_object_not_on_map_failure_test(base_map, capt_kidd):
         fail("should have raised an exception")
     except ValidationError as e:
         assert_that(e).is_not_none()
-        assert_that(str(e)).contains("cannot move Captain Kidd to 5, 5, object not on map")
+        assert_that(str(e)).contains(
+            "cannot move Captain Kidd to 5, 5, object not on map",
+        )
 
 
 def place_big_villian_on_map_test(base_map, big_villain):
     base_map.place(big_villain, 5, 5)
 
     assert_that(base_map.objects).is_length(1)
-    assert_that(base_map.objects[0].name).is_equal_to('Big Villain')
+    assert_that(base_map.objects[0].name).is_equal_to("Big Villain")
     assert_that(base_map.objects[0].location.row).is_equal_to(5)
     assert_that(base_map.objects[0].location.column).is_equal_to(5)
     assert_that(base_map.objects[0].direction).is_equal_to(Direction.NORTH)
@@ -160,7 +161,9 @@ def place_big_villian_off_map_test(base_map, big_villain):
         fail("should have raised an exception")
     except ValidationError as e:
         assert_that(e).is_not_none()
-        assert_that(str(e)).contains("cannot place Big Villain at 25, 5, no such location")
+        assert_that(str(e)).contains(
+            "cannot place Big Villain at 25, 5, no such location",
+        )
 
 
 def place_big_villian_too_close_to_edge_test(base_map, big_villain):
@@ -169,4 +172,6 @@ def place_big_villian_too_close_to_edge_test(base_map, big_villain):
         fail("should have raised an exception")
     except ValidationError as e:
         assert_that(e).is_not_none()
-        assert_that(str(e)).contains("cannot place Big Villain at 15, 28, object does not fit")
+        assert_that(str(e)).contains(
+            "cannot place Big Villain at 15, 28, object does not fit",
+        )

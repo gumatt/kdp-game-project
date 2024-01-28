@@ -1,6 +1,7 @@
 from typing import Annotated
 
-from msgspec import Meta, Struct, ValidationError as VE
+from msgspec import Meta, Struct
+from msgspec import ValidationError as VE  # noqa: N817
 
 MapDirection = int
 RowValue = int
@@ -26,8 +27,7 @@ class MapDimensionsOrdinal(Struct):
 
 
 class Mappable(Struct):
+    name: str
     location: MapLocationOrdinal
     direction: MapDirection
     size: MapDimensionsOrdinal
-
-

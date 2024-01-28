@@ -1,15 +1,16 @@
 from typing import Self
+
 from msgspec import Struct
 
 from kdp.domain.value_objects import (
     ColumnValue,
-    MapDirection,
     MapDimensionsOrdinal,
+    MapDirection,
     MapLocationOrdinal,
     Mappable,
     RowValue,
-    ValidationError)
-
+    ValidationError,
+)
 
 
 class MapOrdinal(Struct):
@@ -18,13 +19,20 @@ class MapOrdinal(Struct):
     Attributes:
         dimensions (MapDimensionsOrdinal): The dimensions of the map.
         objects (List[Mappable]): The list of objects placed on the map."""
+
     dimensions: MapDimensionsOrdinal
     objects: list[Mappable]
 
     @classmethod
-    def factory(cls, rows: RowValue, columns: ColumnValue, objects: list[Mappable]) -> Self:
+    def factory(
+        cls,
+        rows: RowValue,
+        columns: ColumnValue,
+        objects: list[Mappable],
+    ) -> Self:
         if rows <= 0 or columns <= 0:
             raise ValidationError("rows and columns must be greater than 0")
+        objects = objects or []
         return cls(dimensions=MapDimensionsOrdinal(rows, columns), objects=objects)
 
     def move(self, obj: Mappable, row: RowValue, col: ColumnValue) -> None:
@@ -39,13 +47,20 @@ class MapOrdinal(Struct):
             None
 
         Raises:
-            ValidationError: If the object is not on the map, the specified location is invalid, or the object does not fit."""
+            ValidationError: If the object is not on the map, the specified
+            location is invalid, or the object does not fit."""
         if obj not in self.objects:
-            raise ValidationError(f"cannot move {obj.name} to {row}, {col}, object not on map")
+            raise ValidationError(
+                f"cannot move {obj.name} to {row}, {col}, object not on map",
+            )
         if not self.valid_location(row, col):
-            raise ValidationError(f"cannot move {obj.name} to {row}, {col}, no such location")
+            raise ValidationError(
+                f"cannot move {obj.name} to {row}, {col}, no such location",
+            )
         if not self.object_fits(obj, row, col):
-            raise ValidationError(f"cannot move {obj.name} to {row}, {col}, object does not fit")
+            raise ValidationError(
+                f"cannot move {obj.name} to {row}, {col}, object does not fit",
+            )
         obj.location.row = row
         obj.location.column = col
 
@@ -61,16 +76,20 @@ class MapOrdinal(Struct):
             None
 
         Raises:
-            ValidationError: If the specified location is invalid or the object does not fit."""
+            ValidationError: If the specified location is invalid or the object does not fit.
+        """
         if not self.valid_location(row, col):
-            raise ValidationError(f"cannot place {obj.name} at {row}, {col}, no such location")
+            raise ValidationError(
+                f"cannot place {obj.name} at {row}, {col}, no such location",
+            )
         if not self.object_fits(obj, row, col):
-            raise ValidationError(f"cannot place {obj.name} at {row}, {col}, object does not fit")
+            raise ValidationError(
+                f"cannot place {obj.name} at {row}, {col}, object does not fit",
+            )
         obj.location.row = row
         obj.location.column = col
         if obj not in self.objects:
             self.objects.append(obj)
-
 
     def valid_location(self, row: RowValue, col: ColumnValue) -> bool:
         """Checks if the specified row and column is a valid location on the map.
@@ -103,12 +122,13 @@ class MapOrdinal(Struct):
             and col + obj.size.columns <= self.dimensions.columns
         )
 
+
 class KDPMap(MapOrdinal):
     """
     Represents a KDP map, which is a specific type of MapOrdinal.
     """
-    pass
 
+    pass
 
 
 class Villain(Mappable):
@@ -116,20 +136,27 @@ class Villain(Mappable):
 
     Attributes:
         name (str): The name of the villain.
-        map_info (Mappable): The map information of the villain, including location, direction, and size.
-
+        location (MapLocationOrdinal): The location of the villain on the map.
+        direction (MapDirection): The direction of the villain on the map.
+        size (MapDimensionsOrdinal): The size of the villain on the map.
     Methods:
         factory(cls, name: str, row: RowValue, col: ColumnValue, direction: MapDirection, size: RowValue) -> Self:
-            Creates a new instance of Villain with the given name and map information."""
-    name: str
-    # map_info: Mappable
+            Creates a new instance of Villain with the given name and map information.
+    """
 
     @classmethod
-    def factory(cls, name: str, row: RowValue, col: ColumnValue, direction: MapDirection, size: RowValue) -> Self:
+    def factory(  # noqa: PLR0913
+        cls,
+        name: str,
+        row: RowValue,
+        col: ColumnValue,
+        direction: MapDirection,
+        size: RowValue,
+    ) -> Self:
         """"""
         return cls(
             name=name,
             location=MapLocationOrdinal(row, col),
             direction=direction,
-            size=MapDimensionsOrdinal(size, size)
+            size=MapDimensionsOrdinal(size, size),
         )

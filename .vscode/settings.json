@@ -4,5 +4,17 @@
     ],
     "python.testing.unittestEnabled": false,
     "python.testing.pytestEnabled": true,
-    "pythonTestExplorer.testFramework": "pytest"
+    "pythonTestExplorer.testFramework": "pytest",
+    "mypy.runUsingActiveInterpreter": true,
+    "editor.defaultFormatter": "ruff.ruff",
+    "editor.formatOnSave": true,
+    "editor.fontFamily": "Geist Mono, Menlo, Monaco, 'Courier New', monospace",
+    "workbench.colorCustomizations": {
+        "panel.border": "#ffaa00",
+        "tab.border": "#ffaa",
+        "editorGroup.border": "#ffaa",
+        "editorGroup.dropBackground": "#ffaa",
+        "sideBar.border": "#ffaa00",
+    },
+    "editor.minimap.autohide": true,
 }
